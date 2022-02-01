@@ -8,10 +8,18 @@ import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 import "jquery"
+import raty from 'raty-js'
 import "popper.js"
 import "bootstrap"
 import '@fortawesome/fontawesome-free/js/all';
-import "../stylesheets/application" 
+import "../stylesheets/application"
+
+// include jQuery in global and window scope (so you can access it globally)
+// in your web browser, when you type $('.div'), it is actually refering to global.$('.div')
+var jQuery = require('jquery')
+global.$ = global.jQuery = jQuery;
+window.$ = window.jQuery = jQuery;
+
 
 Rails.start()
 Turbolinks.start()

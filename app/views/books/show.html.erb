@@ -25,10 +25,10 @@
           <% end %>
        </tr>
       </table>
-      <div class="book-comment-index">
+      <div class="book-comments">
       <%= render 'book_comments/index',book: @book%>
       </div>
-      <%= form_with model:[@book, @book_comment] do |f| %>
+      <%= form_with model:[@book, @book_comment], local: false do |f| %>
       <%= f.text_area :comment, rows: '5', placeholder: "コメントをここに", class: "w-100"%>
       <br><%= f.submit"送信" %>
       <% end %>
