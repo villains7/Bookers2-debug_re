@@ -5,7 +5,11 @@ class BookCommentsController < ApplicationController
     @book_comment = BookComment.new(book_comment_params)
     @book_comment.book_id = @book.id
     @book_comment.user_id = current_user.id
-    @book_comment.save
+   if  @book_comment.save
+     #通知の作成
+     @book_comment.book.create_notification_comment!(current_user,@book_comment.id)
+     redirect_to request.referer
+   end
   end
 
   def destroy
