@@ -5,7 +5,10 @@ class RelationshipsController < ApplicationController
     @user = User.find(params[:user_id])
     current_user.follow(params[:user_id])
     @user.create_notification_follow!(current_user)
-    redirect_to request.referer
+    respond_to do |format|
+      format.html{redirect_to @user}
+        format.js
+      end
   end
 
   def destroy

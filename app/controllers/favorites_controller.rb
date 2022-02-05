@@ -4,11 +4,8 @@ class FavoritesController < ApplicationController
     favorite = @book.favorites.new(user_id: current_user.id)
     favorite.save
     #redirect_to request.referer
-    @book.create_notification_by(current_user)
-    respond_to do |format|
-      format.html{redirect_to request.request.referer}
-        format.js
-      end
+    @book.create_notification_like!(current_user)
+    respond_to :js
   end
 
   def destroy

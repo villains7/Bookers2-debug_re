@@ -7,6 +7,9 @@ class Book < ApplicationRecord
   validates :title,presence:true
   validates :body,presence:true,length:{maximum:200}
   is_impressionable counter_cache: true
+  validates :rate, numericality: {
+    less_than_or_equal_to: 5,
+    greater_than_or_equal_to: 1}, presence: true
 
   def favorited_by?(user)
     favorites.exists?(user_id: user.id)
@@ -24,9 +27,20 @@ class Book < ApplicationRecord
     end
   end
 
-  def create_notification_by(current_user)
-   notification = current_user.active_notifications.new(book_id: id,visited_id: user_id, action: 'favorite')
-   notification.save if notification.valid?
+  def create_notification_like(current_user)
+   temp = Notification.new(["visitor_id = ? and visited_id = ? and book_id = ? and action = ? ", current_user.id, user_id, id,'favorite'])
+   if temp.blank?
+      notification = current_user.active_notifications.new(
+        book_id: id,
+        visited_id: user_id,
+        action: 'favorite'
+      )
+      # 自分の投稿に対するいいねの場合は、通知済みとする
+      if notification.visitor_id == notification.visited_id
+        notification.checked = true
+      end
+      notification.save if notification.valid?
+   end
   end
 
   def create_notification_comment!(current_user,book_comment_id)

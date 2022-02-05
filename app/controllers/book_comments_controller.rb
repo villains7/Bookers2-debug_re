@@ -8,7 +8,9 @@ class BookCommentsController < ApplicationController
    if  @book_comment.save
      #通知の作成
      @book_comment.book.create_notification_comment!(current_user,@book_comment.id)
-     redirect_to request.referer
+     respond_to :js
+   else
+     render 'books/show'
    end
   end
 

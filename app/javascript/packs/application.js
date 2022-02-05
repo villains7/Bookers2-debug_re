@@ -8,7 +8,6 @@ import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 import "jquery"
-import raty from 'raty-js'
 import "popper.js"
 import "bootstrap"
 import '@fortawesome/fontawesome-free/js/all';
@@ -18,9 +17,9 @@ import "../stylesheets/application"
 // in your web browser, when you type $('.div'), it is actually refering to global.$('.div')
 var jQuery = require('jquery')
 global.$ = global.jQuery = jQuery;
-window.$ = window.jQuery = jQuery;
-
+window.$ = window.jQuery = require('jquery');
 require('packs/raty')
+
 
 Rails.start()
 Turbolinks.start()
