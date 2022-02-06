@@ -8,17 +8,21 @@ before_action :ensure_correct_user, only: [:edit, :update, :destroy]
     @book_new = Book.new
     @book_comment = BookComment.new
     impressionist(@book,nil,unique: [:ip_address])
+    @book_tags = @book.tags
   end
 
   def index
     @books = Book.all
     @book_new = Book.new
+    @tag_list = Tag.all
   end
 
   def create
-    @book = Book.new(book_params)
+    @book = Book.new
     @book.user_id = current_user.id
+    tag_list = params[:book][:tag_name].split(nil)
     if @book.save
+      @book.save_tag(tag_list)
       redirect_to book_path(@book.id), notice: "You have created book successfully."
     else
       @books = Book.all
@@ -46,16 +50,22 @@ before_action :ensure_correct_user, only: [:edit, :update, :destroy]
     redirect_to books_path
   end
 
+  def search
+    @tag_list = Tag.all
+    @tag = Tag.find(params[:tag_id])
+    @book = @tag.book.all
+  end
+
   private
 
   def book_params
-    params.require(:book).permit(:title,:body,:rate)
+    params.require(:book).permit(:title,:body,:rate,:tag_name)
   end
 
    def ensure_correct_user
       @book = Book.find(params[:id])
       unless @book.user == current_user
         redirect_to books_path
-     end
-  end
+      end
+   end
 end

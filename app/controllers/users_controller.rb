@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @books = @user.books
-    @book = Book.new
+    @book_new = Book.new
     @current_entry = Entry.where(user_id: current_user.id)
     @another_entry = Entry.where(user_id: @user.id)
     unless @user.id == current_user.id
@@ -21,6 +21,8 @@ class UsersController < ApplicationController
         @entry = Entry.new
       end
     end
+    @book = Book.find(params[:id])
+    @book_tags = @book.tags
   end
 
   def index
